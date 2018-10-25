@@ -1,0 +1,58 @@
+import discord
+import time
+from weather import Weather, Unit
+import random
+client = discord.Client()
+
+@client.event
+async def on_message(message):
+    # we do not want the bot to reply to itself
+    if message.author == client.user:
+        return
+
+    if message.content.upper().startswith('HELLO'):
+        msg = 'Hello Mr. {0.author.mention}'.format(message)
+        await client.send_message(message.channel, msg)
+
+    elif message.content.upper().startswith('TIME'):
+        t = time.strftime("%I:%M:%S")
+        tmsg = 'The time is %s' % t
+        ttmsg = (tmsg) + ' Mr. {0.author.mention}'.format(message)
+        await client.send_message(message.channel, ttmsg)
+
+    elif message.content.upper().startswith("DATE"):
+        d = time.strftime("%m/%d/%Y")
+        dmsg = 'The date is %s' % d
+        ddmsg = (dmsg) + ' Mr. {0.author.mention}'.format(message)
+        await client.send_message(message.channel, ddmsg)
+
+    elif message.content.upper().startswith("WEATHER"):
+        weather = Weather(unit=Unit.CELSIUS)
+
+        lookup = weather.lookup(2518337)
+        condition = lookup.condition
+        wmsg = 'The weather is %s ' % condition.text
+        wwmsg = (wmsg) + ' Mr. {0.author.mention}'.format(message)
+        await client.send_message(message.channel, wwmsg)
+    elif message.content.upper().startswith("WHAT IS LOVE"):
+        await client.send_message(message.channel, "Don't hurt me, don't hurt me, no more :no_good: ...")
+
+    elif message.content.upper().startswith("COMO ESTAS"):
+        await client.send_message(message.channel, "Estoy bien :ok_hand: ")
+
+
+
+    elif message.content.upper().startswith('GOODBYE'):
+        await client.send_message(message.channel, "Good night sir...")
+        exit()
+
+
+
+@client.event
+async def on_ready():
+    print('Logged in as')
+    print(client.user.name)
+    print(client.user.id)
+    print('------')
+
+client.run('NTAzMzA2MzIwNDg5NzQyMzU5.Dq0kjw.Rn5bfuockrpVw_3GgjgDr4_x408')
